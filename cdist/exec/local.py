@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# 2011 Steven Armstrong (steven-cdist at armstrong.cc)
+# 2011-2017 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2011-2015 Nico Schottelius (nico-cdist at schottelius.org)
 # 2016 Darko Poljak (darko.poljak at gmail.com)
 #
@@ -184,8 +184,8 @@ class Local(object):
         self.log.debug("Local mkdir: %s", path)
         os.makedirs(path, exist_ok=True)
 
-    def run(self, command, env=None, return_output=False, message_prefix=None,
-            save_output=True):
+    # FIXME: asteven: save_output probably does not make any sense
+    def run(self, command, env=None, return_output=False, message_prefix=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, save_output=True):
         """Run the given command with the given environment.
         Return the output as a string.
 
@@ -193,6 +193,9 @@ class Local(object):
         self.log.debug("Local run: %s", command)
         assert isinstance(command, (list, tuple)), (
                 "list or tuple argument expected, got: %s" % command)
+
+        if return_output and stdout is not subprocess.PIPE:
+            self.log.warn("return_output is True, ignoring stdout")
 
         if env is None:
             env = os.environ.copy()
@@ -210,6 +213,7 @@ class Local(object):
             env.update(message.env)
 
         try:
+            # FIXME: asteven: need an efficient way to retreive both stdout and stderr for feature/output_streams
             if save_output:
                 output, errout = exec_util.call_get_output(command, env=env)
                 self.log.debug("Local stdout: {}".format(output))
@@ -224,14 +228,20 @@ class Local(object):
                 subprocess.check_call(command, env=env)
         except subprocess.CalledProcessError as e:
             exec_util.handle_called_process_error(e, command)
+# TODO: commented code from rebase conflict feature/output_streams
+#            if return_output:
+#                return subprocess.check_output(command, env=env, stderr=stderr).decode()
+#            else:
+#                subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
+#        except subprocess.CalledProcessError:
+#            raise cdist.Error("Command failed: " + " ".join(command))
         except OSError as error:
             raise cdist.Error(" ".join(command) + ": " + error.args[1])
         finally:
             if message_prefix:
                 message.merge_messages()
 
-    def run_script(self, script, env=None, return_output=False,
-                   message_prefix=None):
+    def run_script(self, script, env=None, return_output=False, message_prefix=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         """Run the given script with the given environment.
         Return the output as a string.
 
@@ -239,8 +249,7 @@ class Local(object):
         command = [os.environ.get('CDIST_LOCAL_SHELL', "/bin/sh"), "-e"]
         command.append(script)
 
-        return self.run(command=command, env=env, return_output=return_output,
-                        message_prefix=message_prefix)
+        return self.run(command, env=env, return_output=return_output, message_prefix=message_prefix, stdout=stdout, stderr=stderr)
 
     def save_cache(self):
         destination = os.path.join(self.cache_path, self.hostdir)

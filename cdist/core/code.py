@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# 2011 Steven Armstrong (steven-cdist at armstrong.cc)
+# 2011-2017 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2011-2013 Nico Schottelius (nico-cdist at schottelius.org)
 # 2014 Daniel Heule (hda at sfs.biz)
 #
@@ -151,7 +151,15 @@ class Code(object):
         which_exec = getattr(self, which)
         script = os.path.join(which_exec.object_path,
                               getattr(cdist_object, 'code_%s_path' % which))
-        return which_exec.run_script(script, env=env)
+        stdout_dir = os.path.join(cdist_object.absolute_path, 'stdout')
+        self.local.mkdir(stdout_dir)
+        stderr_dir = os.path.join(cdist_object.absolute_path, 'stderr')
+        self.local.mkdir(stderr_dir)
+        with open(os.path.join(stderr_dir, which), 'ba') as stderr, \
+            open(os.path.join(stdout_dir, which), 'ba') as stdout:
+            return which_exec.run_script(script, env=env,
+                                         stdout=stdout,
+                                         stderr=stderr)
 
     def run_code_local(self, cdist_object):
         """Run the code-local script for the given cdist object."""
