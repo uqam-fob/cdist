@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# 2011 Steven Armstrong (steven-cdist at armstrong.cc)
+# 2011-2017 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2012-2015 Nico Schottelius (nico-cdist at schottelius.org)
 #
 # This file is part of cdist.
@@ -36,9 +36,7 @@ my_dir = op.abspath(op.dirname(__file__))
 fixtures = op.join(my_dir, 'fixtures')
 conf_dir = op.join(fixtures, 'conf')
 
-
-class CodeTestCase(test.CdistTestCase):
-
+class BaseTestCase(test.CdistTestCase):
     def setUp(self):
         self.local_dir = self.mkdtemp()
         self.hostdir = cdist.str_hash(self.target_host[0])
@@ -74,6 +72,15 @@ class CodeTestCase(test.CdistTestCase):
     def tearDown(self):
         shutil.rmtree(self.local_dir)
         shutil.rmtree(self.remote_dir)
+
+
+class CodeTestCase(BaseTestCase):
+
+    def setUp(self):
+        super(CodeTestCase, self).setUp()
+        self.cdist_type = core.CdistType(self.local.type_path, '__dump_environment')
+        self.cdist_object = core.CdistObject(self.cdist_type, self.local.object_path, 'whatever')
+        self.cdist_object.create()
 
     def test_run_gencode_local_environment(self):
         output_string = self.code.run_gencode_local(self.cdist_object)
@@ -139,6 +146,38 @@ class CodeTestCase(test.CdistTestCase):
                 self.cdist_object)
         self.code.transfer_code_remote(self.cdist_object)
         self.code.run_code_remote(self.cdist_object)
+
+
+class CaptureOutputTestCase(BaseTestCase):
+
+    def setUp(self):
+        super(CaptureOutputTestCase, self).setUp()
+        self.cdist_type = core.CdistType(self.local.type_path, '__write_to_stdout_and_stderr')
+        self.cdist_object = core.CdistObject(self.cdist_type, self.local.object_path)
+        self.cdist_object.create()
+        self.output_dirs = {
+            'stdout': os.path.join(self.cdist_object.absolute_path, 'stdout'),
+            'stderr': os.path.join(self.cdist_object.absolute_path, 'stderr'),
+        }
+
+    def _test_output(self, where):
+        for stream in ('stdout', 'stderr'):
+            _should = '{0}: {1}\n'.format(where, stream)
+            with open(os.path.join(self.output_dirs[stream], where), 'r') as fd:
+                _is = fd.read()
+            self.assertEqual(_should, _is)
+
+    def test_capture_local_output(self):
+        self.cdist_object.code_local = self.code.run_gencode_local(self.cdist_object)
+        self.code.run_code_local(self.cdist_object)
+        self._test_output('local')
+
+    def test_capture_remote_output(self):
+        self.cdist_object.code_remote = self.code.run_gencode_remote(self.cdist_object)
+        self.code.transfer_code_remote(self.cdist_object)
+        self.code.run_code_remote(self.cdist_object)
+        self._test_output('remote')
+
 
 if __name__ == '__main__':
     import unittest
