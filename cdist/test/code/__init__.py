@@ -36,7 +36,9 @@ my_dir = op.abspath(op.dirname(__file__))
 fixtures = op.join(my_dir, 'fixtures')
 conf_dir = op.join(fixtures, 'conf')
 
-class BaseTestCase(test.CdistTestCase):
+
+class CodeTestCase(test.CdistTestCase):
+
     def setUp(self):
         self.local_dir = self.mkdtemp()
         self.hostdir = cdist.str_hash(self.target_host[0])
@@ -67,19 +69,6 @@ class BaseTestCase(test.CdistTestCase):
         self.cdist_object = core.CdistObject(
                 self.cdist_type, self.local.object_path, 'whatever',
                 self.local.object_marker_name)
-        self.cdist_object.create()
-
-    def tearDown(self):
-        shutil.rmtree(self.local_dir)
-        shutil.rmtree(self.remote_dir)
-
-
-class CodeTestCase(BaseTestCase):
-
-    def setUp(self):
-        super(CodeTestCase, self).setUp()
-        self.cdist_type = core.CdistType(self.local.type_path, '__dump_environment')
-        self.cdist_object = core.CdistObject(self.cdist_type, self.local.object_path, 'whatever')
         self.cdist_object.create()
 
     def test_run_gencode_local_environment(self):
