@@ -6,6 +6,7 @@ for pkg in \
     file \
     linux-image-amd64 \
     lsb-release \
+    dosfstools \
     openssh-server curl \
     pxelinux syslinux-common \
     gdisk util-linux lvm2 mdadm \
