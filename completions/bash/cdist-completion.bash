@@ -21,32 +21,32 @@ _cdist()
          inventory)
             case "${prev}" in
                 list)
-                    opts="-h --help -d --debug -v --verbose -b --enable-beta \
+                    opts="-h --help -d --debug -v --verbose -b --beta \
                         -I --inventory -a --all -f --file -H --host-only \
                         -t --tag"
                     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
                     return 0
                     ;;
                 add-host)
-                    opts="-h --help -d --debug -v --verbose -b --enable-beta \
+                    opts="-h --help -d --debug -v --verbose -b --beta \
                         -I --inventory -f --file"
                     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
                     return 0
                     ;;
                 del-host)
-                    opts="-h --help -d --debug -v --verbose -b --enable-beta \
+                    opts="-h --help -d --debug -v --verbose -b --beta \
                         -I --inventory -a --all -f --file"
                     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
                     return 0
                     ;;
                 add-tag)
-                    opts="-h --help -d --debug -v --verbose -b --enable-beta \
+                    opts="-h --help -d --debug -v --verbose -b --beta \
                         -I --inventory -f --file -T --tag-file -t --taglist"
                     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
                     return 0
                     ;;
                 del-tag)
-                    opts="-h --help -d --debug -v --verbose -b --enable-beta \
+                    opts="-h --help -d --debug -v --verbose -b --beta \
                         -I --inventory -a --all -f --file -T --tag-file -t --taglist"
                     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
                     return 0
