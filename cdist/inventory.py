@@ -26,6 +26,7 @@ import os
 import os.path
 import itertools
 import sys
+from cdist.hostsource import hostfile_process_line
 
 DIST_INVENTORY_DB_NAME = "inventory"
 
@@ -110,8 +111,7 @@ class Inventory(object):
             try:
                 with fileinput.FileInput(files=(source)) as f:
                     for x in f:
-                        result = cdist.util.hostfile.hostfile_process_line(
-                                x, strip_func=rstrip_nl)
+                        result = hostfile_process_line(x, strip_func=rstrip_nl)
                         if result:
                             yield result
             except (IOError, OSError) as e:
