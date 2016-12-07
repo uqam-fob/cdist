@@ -11,7 +11,7 @@ _cdist()
 
     case $state in
         opts_cmds)
-            _arguments '1:Options and commands:(banner config shell install inventory -h --help -d --debug -v --verbose -V --version)'
+            _arguments '1:Options and commands:(banner config install inventory preos shell trigger -h --help -d --debug -v --verbose -V --version)'
             ;;
         *)
             case $words[2] in
@@ -36,7 +36,11 @@ _cdist()
                     esac
                     ;;
                 config|install)
-                    opts=(-h --help -d --debug -v --verbose -a --all -b --beta -c --conf-dir -f --file -i --initial-manifest -j --jobs -n --dry-run -o --out-dir -p --parallel -s --sequential --remote-copy --remote-exec -t --tag -I --inventory)
+                    opts=(-h --help -d --debug -v --verbose -a --all -b --beta -C --cache-path-pattern -c --conf-dir -f --file -i --initial-manifest -j --jobs -n --dry-run -o --out-dir -p --parallel -s --sequential --remote-copy --remote-exec -t --tag -I --inventory -A --all-tagged)
+                    compadd "$@" -- $opts
+                    ;;
+                trigger)
+                    opts=(-h --help -d --debug -v --verbose -b --beta -C --cache-path-pattern -c --conf-dir -i --initial-manifest -j --jobs -n --dry-run -o --out-dir --remote-copy --remote-exec -6 --ipv6 -H --http-port -D --directory -S --source)
                     compadd "$@" -- $opts
                     ;;
                 inventory)
