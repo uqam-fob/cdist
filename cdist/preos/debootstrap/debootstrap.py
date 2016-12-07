@@ -167,7 +167,12 @@ class Debian(object):
             env = vars(args)
             new_env = {}
             for key in env:
-                if not env[key]:
+                if key == 'verbose':
+                    if env[key] >= 3:
+                        new_env['debug'] = "yes"
+                    elif env[key] == 2:
+                        new_env['verbose'] = "yes"
+                elif not env[key]:
                     new_env[key] = ''
                 elif isinstance(env[key], bool) and env[key]:
                     new_env[key] = "yes"
@@ -194,6 +199,7 @@ class Debian(object):
                 info_msg.append(", configuring")
             if args.pxe_boot_dir:
                 info_msg.append(", creating PXE")
+            log.info(info_msg)
             log.debug("cmd={}".format(cmd))
             subprocess.check_call(cmd, env=env, shell=True)
         except subprocess.CalledProcessError as e:
