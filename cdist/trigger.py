@@ -101,14 +101,23 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         self.dispatch_request()
 
+    def _actions_regex(self):
+        regex = ["^/(?P<subsystem>", ]
+        regex.extend("|".join(self.actions.keys()))
+        regex.append(")/(?P<action>")
+        regex.extend("|".join("|".join(self.actions[x]) for x in self.actions))
+        regex.append(")/")
+
+        return "".join(regex)
+
     def dispatch_request(self):
         host = self.client_address[0]
         code = 200
 
         self.cdistargs = self.server.cdistargs
 
-        # FIXME: generate regexp based on self.actions
-        m = re.match("^/(?P<subsystem>cdist|file)/(?P<action>present|absent|config|install)/", self.path)
+        actions_regex = self._actions_regex()
+        m = re.match(actions_regex, self.path)
 
         if m:
             subsystem = m.group('subsystem')
