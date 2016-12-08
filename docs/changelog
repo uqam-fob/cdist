@@ -6,6 +6,7 @@ next:
 	* Core: Add trigger functionality (Nico Schottelius, Darko Poljak)
 	* Core: Add preos functionality (Darko Poljak)
 	* Core: Add inventory functionality (Darko Poljak)
+	* Type __apt_mark: check supported apt version and if package is installed (Ander Punnar)
 	* New type: __docker (Steven Armstrong)
 	* New type: __package_dpkg (Tomas Pospisek)
 
