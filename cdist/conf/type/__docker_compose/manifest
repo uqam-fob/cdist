@@ -1,7 +1,6 @@
 #!/bin/sh
 #
-# 2011-2013 Steven Armstrong (steven-cdist at armstrong.cc)
-# 2013      Nico Schottelius (nico-cdist at schottelius.org)
+# 2016 Dominique Roux (dominique.roux at ungleich.ch)
 #
 # This file is part of cdist.
 #
@@ -18,13 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with cdist. If not, see <http://www.gnu.org/licenses/>.
 #
+#
 
-name="$__object_name"
-user="$(cat "$__object/parameter/user")"
-
-if [ -f "$__object/parameter/raw_command" ]; then
-    command="$(cat "$__object/parameter/command")"
-    crontab -u $user -l 2>/dev/null | grep "^$command\$" || true
-else
-    crontab -u $user -l 2>/dev/null | grep "# $name\$" || true
-fi
+# Needed packages
+__docker
+__package curl
