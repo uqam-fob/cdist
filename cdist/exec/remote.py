@@ -217,7 +217,8 @@ class Remote(object):
             cmd.append(string_cmd)
         else:
             cmd.extend(command)
-        return self._run_command(cmd, env=env, return_output=return_output)
+        return self._run_command(cmd, env=env, return_output=return_output,
+                                stdout=stdout, stderr=stderr)
 
     def _run_command(self, command, env=None, return_output=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         """Run the given command with the given environment.
