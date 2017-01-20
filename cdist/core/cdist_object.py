@@ -254,7 +254,7 @@ class CdistObject(object):
                     self.stdout_path,
                     self.stderr_path
                 ):
-                os.makedirs(path, exist_ok=False)
+                os.makedirs(path, exist_ok=allow_overwrite)
         except EnvironmentError as error:
             raise cdist.Error(('Error creating directories for cdist object: '
                                '%s: %s') % (self, error))
