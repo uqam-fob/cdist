@@ -213,28 +213,12 @@ class Local(object):
             env.update(message.env)
 
         try:
-            # FIXME: asteven: need an efficient way to retreive both stdout and stderr for feature/output_streams
-            if save_output:
-                output, errout = exec_util.call_get_output(command, env=env)
-                self.log.debug("Local stdout: {}".format(output))
-                # Currently, stderr is not captured.
-                # self.log.debug("Local stderr: {}".format(errout))
-                if return_output:
-                    return output.decode()
+            if return_output:
+                return subprocess.check_output(command, env=env, stderr=stderr).decode()
             else:
-                # In some cases no output is saved.
-                # This is used for shell command, stdout and stderr
-                # must not be catched.
-                subprocess.check_call(command, env=env)
+                subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
         except subprocess.CalledProcessError as e:
             exec_util.handle_called_process_error(e, command)
-# TODO: commented code from rebase conflict feature/output_streams
-#            if return_output:
-#                return subprocess.check_output(command, env=env, stderr=stderr).decode()
-#            else:
-#                subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
-#        except subprocess.CalledProcessError:
-#            raise cdist.Error("Command failed: " + " ".join(command))
         except OSError as error:
             raise cdist.Error(" ".join(command) + ": " + error.args[1])
         finally:

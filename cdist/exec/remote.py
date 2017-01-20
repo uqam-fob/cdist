@@ -239,21 +239,12 @@ class Remote(object):
 
         self.log.debug("Remote run: %s", command)
         try:
-            # FIXME: asteven: need an efficient way to retreive both stdout and stderr for feature/output_streams
-            output, errout = exec_util.call_get_output(command, env=os_environ)
-            self.log.debug("Remote stdout: {}".format(output))
-            # Currently, stderr is not captured.
-            # self.log.debug("Remote stderr: {}".format(errout))
             if return_output:
-                return output.decode()
-        except subprocess.CalledProcessError as e:
+                return subprocess.check_output(command, env=os_environ, stderr=stderr).decode()
+            else:
+                subprocess.check_call(command, env=os_environ, stdout=stdout, stderr=stderr)
+        except subprocess.CalledProcessError:
             exec_util.handle_called_process_error(e, command)
-# TODO: commented code from rebase conflict feature/output_streams
-#                return subprocess.check_output(command, env=os_environ, stderr=stderr).decode()
-#            else:
-#                subprocess.check_call(command, env=os_environ, stdout=stdout, stderr=stderr)
-#        except subprocess.CalledProcessError:
-#            raise cdist.Error("Command failed: " + " ".join(command))
         except OSError as error:
             raise cdist.Error(" ".join(command) + ": " + error.args[1])
         except UnicodeDecodeError:
