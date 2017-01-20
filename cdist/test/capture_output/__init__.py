@@ -40,12 +40,17 @@ conf_dir = op.join(fixtures, 'conf')
 class CaptureOutputTestCase(test.CdistTestCase):
 
     def setUp(self):
-        self.local_dir = self.mkdtemp()
+        self.temp_dir = self.mkdtemp()
 
-        self.local = local.Local(
+        self.local_dir = os.path.join(self.temp_dir, "local")
+        self.hostdir = cdist.str_hash(self.target_host[0])
+        self.host_base_path = os.path.join(self.local_dir, self.hostdir)
+        os.makedirs(self.host_base_path)
+        self.local = cdist.exec.local.Local(
             target_host=self.target_host,
-            base_path = self.local_dir,
-            exec_path = cdist.test.cdist_exec_path,
+            base_root_path=self.host_base_path,
+            host_dir_name=self.hostdir,
+            exec_path=cdist.test.cdist_exec_path,
             add_conf_dirs=[conf_dir])
         self.local.create_files_dirs()
 
@@ -64,7 +69,10 @@ class CaptureOutputTestCase(test.CdistTestCase):
         self.manifest = manifest.Manifest(self.target_host, self.local)
 
         self.cdist_type = core.CdistType(self.local.type_path, '__write_to_stdout_and_stderr')
-        self.cdist_object = core.CdistObject(self.cdist_type, self.local.object_path)
+        self.cdist_object = core.CdistObject(self.cdist_type,
+                                            self.local.object_path,
+                                            self.local.object_marker_name,
+                                            '')
         self.cdist_object.create()
         self.output_dirs = {
             'stdout': os.path.join(self.cdist_object.absolute_path, 'stdout'),

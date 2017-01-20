@@ -137,37 +137,6 @@ class CodeTestCase(test.CdistTestCase):
         self.code.run_code_remote(self.cdist_object)
 
 
-class CaptureOutputTestCase(BaseTestCase):
-
-    def setUp(self):
-        super(CaptureOutputTestCase, self).setUp()
-        self.cdist_type = core.CdistType(self.local.type_path, '__write_to_stdout_and_stderr')
-        self.cdist_object = core.CdistObject(self.cdist_type, self.local.object_path)
-        self.cdist_object.create()
-        self.output_dirs = {
-            'stdout': os.path.join(self.cdist_object.absolute_path, 'stdout'),
-            'stderr': os.path.join(self.cdist_object.absolute_path, 'stderr'),
-        }
-
-    def _test_output(self, where):
-        for stream in ('stdout', 'stderr'):
-            _should = '{0}: {1}\n'.format(where, stream)
-            with open(os.path.join(self.output_dirs[stream], where), 'r') as fd:
-                _is = fd.read()
-            self.assertEqual(_should, _is)
-
-    def test_capture_local_output(self):
-        self.cdist_object.code_local = self.code.run_gencode_local(self.cdist_object)
-        self.code.run_code_local(self.cdist_object)
-        self._test_output('local')
-
-    def test_capture_remote_output(self):
-        self.cdist_object.code_remote = self.code.run_gencode_remote(self.cdist_object)
-        self.code.transfer_code_remote(self.cdist_object)
-        self.code.run_code_remote(self.cdist_object)
-        self._test_output('remote')
-
-
 if __name__ == '__main__':
     import unittest
     unittest.main()
