@@ -226,16 +226,16 @@ class Local(object):
                 output = subprocess.check_output(command, env=env, stderr=stderr).decode()
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Local stderr:\n{}\n".format(stderr.read()))
+                    self.log.info("Local stderr:\n{}\n".format(stderr.read().decode()))
                 return output
             else:
                 subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Local stderr:\n{}\n".format(stderr.read()))
+                    self.log.info("Local stderr:\n{}\n".format(stderr.read().decode()))
                 if stdout is not None:
                     stdout.seek(0, 0)
-                    self.log.info("Local stdout:\n{}\n".format(stdout.read()))
+                    self.log.info("Local stdout:\n{}\n".format(stdout.read().decode()))
         except subprocess.CalledProcessError as e:
             exec_util.handle_called_process_error(e, command)
         except OSError as error:

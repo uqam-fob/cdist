@@ -244,16 +244,16 @@ class Remote(object):
                 output = subprocess.check_output(command, env=os_environ, stderr=stderr).decode()
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Remote stderr:\n{}\n".format(stderr.read()))
+                    self.log.info("Remote stderr:\n{}\n".format(stderr.read().decode()))
                 return output
             else:
                 subprocess.check_call(command, env=os_environ, stdout=stdout, stderr=stderr)
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Remote stderr:\n{}\n".format(stderr.read()))
+                    self.log.info("Remote stderr:\n{}\n".format(stderr.read().decode()))
                 if stdout is not None:
                     stdout.seek(0, 0)
-                    self.log.info("Remote stdout:\n{}\n".format(stdout.read()))
+                    self.log.info("Remote stdout:\n{}\n".format(stdout.read().decode()))
         except subprocess.CalledProcessError:
             exec_util.handle_called_process_error(e, command)
         except OSError as error:
