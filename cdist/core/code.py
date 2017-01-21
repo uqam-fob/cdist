@@ -24,8 +24,6 @@
 import logging
 import os
 
-import cdist
-
 log = logging.getLogger(__name__)
 
 
@@ -125,7 +123,9 @@ class Code(object):
                 '__object_name': cdist_object.name,
             })
             message_prefix = cdist_object.name
-            with open(os.path.join(cdist_object.stderr_path, 'gencode-'+ which), 'ba+') as stderr:
+            stderr_path = os.path.join(cdist_object.stderr_path,
+                                       'gencode-' + which)
+            with open(stderr_path, 'ba+') as stderr:
                 return self.local.run_script(script, env=env,
                                              return_output=True,
                                              message_prefix=message_prefix,
@@ -154,8 +154,10 @@ class Code(object):
         which_exec = getattr(self, which)
         script = os.path.join(which_exec.object_path,
                               getattr(cdist_object, 'code_%s_path' % which))
-        with open(os.path.join(cdist_object.stderr_path, 'code-'+ which), 'ba+') as stderr, \
-            open(os.path.join(cdist_object.stdout_path, 'code-'+ which), 'ba+') as stdout:
+        stderr_path = os.path.join(cdist_object.stderr_path, 'code-' + which)
+        stdout_path = os.path.join(cdist_object.stdout_path, 'code-' + which)
+        with open(stderr_path, 'ba+') as stderr, \
+                open(stdout_path, 'ba+') as stdout:
             return which_exec.run_script(script, stdout=stdout, stderr=stderr)
 
     def run_code_local(self, cdist_object):

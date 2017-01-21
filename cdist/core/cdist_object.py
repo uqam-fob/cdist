@@ -21,10 +21,8 @@
 #
 #
 
-import fnmatch
 import logging
 import os
-import collections
 
 import cdist
 import cdist.core
@@ -250,10 +248,9 @@ class CdistObject(object):
         """
         try:
             for path in (self.absolute_path,
-                    os.path.join(self.base_path, self.parameter_path),
-                    self.stdout_path,
-                    self.stderr_path
-                ):
+                         os.path.join(self.base_path, self.parameter_path),
+                         self.stdout_path,
+                         self.stderr_path):
                 os.makedirs(path, exist_ok=allow_overwrite)
         except EnvironmentError as error:
             raise cdist.Error(('Error creating directories for cdist object: '

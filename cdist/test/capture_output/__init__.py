@@ -68,11 +68,12 @@ class CaptureOutputTestCase(test.CdistTestCase):
 
         self.manifest = manifest.Manifest(self.target_host, self.local)
 
-        self.cdist_type = core.CdistType(self.local.type_path, '__write_to_stdout_and_stderr')
+        self.cdist_type = core.CdistType(self.local.type_path,
+                                         '__write_to_stdout_and_stderr')
         self.cdist_object = core.CdistObject(self.cdist_type,
-                                            self.local.object_path,
-                                            self.local.object_marker_name,
-                                            '')
+                                             self.local.object_path,
+                                             self.local.object_marker_name,
+                                             '')
         self.cdist_object.create()
         self.output_dirs = {
             'stdout': os.path.join(self.cdist_object.absolute_path, 'stdout'),
@@ -86,18 +87,21 @@ class CaptureOutputTestCase(test.CdistTestCase):
     def _test_output(self, which, streams=('stdout', 'stderr')):
         for stream in streams:
             _should = '{0}: {1}\n'.format(which, stream)
-            with open(os.path.join(self.output_dirs[stream], which), 'r') as fd:
+            stream_path = os.path.join(self.output_dirs[stream], which)
+            with open(stream_path, 'r') as fd:
                 _is = fd.read()
             self.assertEqual(_should, _is)
 
     def test_capture_code_output(self):
-        self.cdist_object.code_local = self.code.run_gencode_local(self.cdist_object)
+        self.cdist_object.code_local = self.code.run_gencode_local(
+            self.cdist_object)
         self._test_output('gencode-local', ('stderr',))
 
         self.code.run_code_local(self.cdist_object)
         self._test_output('code-local')
 
-        self.cdist_object.code_remote = self.code.run_gencode_remote(self.cdist_object)
+        self.cdist_object.code_remote = self.code.run_gencode_remote(
+            self.cdist_object)
         self._test_output('gencode-remote', ('stderr',))
 
         self.code.transfer_code_remote(self.cdist_object)

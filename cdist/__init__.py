@@ -21,7 +21,6 @@
 #
 
 import os
-import subprocess
 import hashlib
 
 import cdist.version
@@ -96,12 +95,13 @@ class CdistObjectError(Error):
     def stderr(self):
         output = []
         for stderr_name in os.listdir(self.cdist_object.stderr_path):
-            stderr_path = os.path.join(self.cdist_object.stderr_path, stderr_name)
-            #label = '---- '+ stderr_name +':stderr '
-            label = stderr_name +':stderr '
+            stderr_path = os.path.join(self.cdist_object.stderr_path,
+                                       stderr_name)
+            # label = '---- '+ stderr_name +':stderr '
+            label = stderr_name + ':stderr '
             if os.path.getsize(stderr_path) > 0:
-                #output.append(label)
-                #output.append('{0:-^50}'.format(label.center(len(label)+2)))
+                # output.append(label)
+                # output.append('{0:-^50}'.format(label.center(len(label)+2)))
                 output.append('{0:-<{1}}'.format(label, self.line_length))
                 with open(stderr_path, 'r') as fd:
                     output.append(fd.read())

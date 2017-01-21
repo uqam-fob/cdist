@@ -194,7 +194,8 @@ class Local(object):
         os.makedirs(path, exist_ok=True)
 
     # FIXME: asteven: save_output probably does not make any sense
-    def run(self, command, env=None, return_output=False, message_prefix=None, stdout=None, stderr=None, save_output=True):
+    def run(self, command, env=None, return_output=False, message_prefix=None,
+            stdout=None, stderr=None, save_output=True):
         """Run the given command with the given environment.
         Return the output as a string.
 
@@ -223,19 +224,24 @@ class Local(object):
 
         try:
             if return_output:
-                output = subprocess.check_output(command, env=env, stderr=stderr).decode()
+                output = subprocess.check_output(
+                    command, env=env, stderr=stderr).decode()
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Local stderr:\n{}\n".format(stderr.read().decode()))
+                    self.log.info("Local stderr:\n{}\n".format(
+                        stderr.read().decode()))
                 return output
             else:
-                subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
+                subprocess.check_call(command, env=env, stdout=stdout,
+                                      stderr=stderr)
                 if stderr is not None:
                     stderr.seek(0, 0)
-                    self.log.info("Local stderr:\n{}\n".format(stderr.read().decode()))
+                    self.log.info("Local stderr:\n{}\n".format(
+                        stderr.read().decode()))
                 if stdout is not None:
                     stdout.seek(0, 0)
-                    self.log.info("Local stdout:\n{}\n".format(stdout.read().decode()))
+                    self.log.info("Local stdout:\n{}\n".format(
+                        stdout.read().decode()))
         except subprocess.CalledProcessError as e:
             exec_util.handle_called_process_error(e, command)
         except OSError as error:
@@ -244,7 +250,8 @@ class Local(object):
             if message_prefix:
                 message.merge_messages()
 
-    def run_script(self, script, env=None, return_output=False, message_prefix=None, stdout=None, stderr=None):
+    def run_script(self, script, env=None, return_output=False,
+                   message_prefix=None, stdout=None, stderr=None):
         """Run the given script with the given environment.
         Return the output as a string.
 
@@ -252,7 +259,9 @@ class Local(object):
         command = [os.environ.get('CDIST_LOCAL_SHELL', "/bin/sh"), "-e"]
         command.append(script)
 
-        return self.run(command, env=env, return_output=return_output, message_prefix=message_prefix, stdout=stdout, stderr=stderr)
+        return self.run(command, env=env, return_output=return_output,
+                        message_prefix=message_prefix, stdout=stdout,
+                        stderr=stderr)
 
     def save_cache(self):
         destination = os.path.join(self.cache_path, self.hostdir)

@@ -276,7 +276,8 @@ class Config(object):
 
         for cdist_object in self.object_list():
             try:
-                if cdist_object.requirements_unfinished(cdist_object.requirements):
+                if cdist_object.requirements_unfinished(
+                        cdist_object.requirements):
                     """We cannot do anything for this poor object"""
                     continue
 
@@ -286,7 +287,8 @@ class Config(object):
                     self.object_prepare(cdist_object)
                     objects_changed = True
 
-                if cdist_object.requirements_unfinished(cdist_object.autorequire):
+                if cdist_object.requirements_unfinished(
+                        cdist_object.autorequire):
                     """The previous step created objects we depend on -
                        wait for them
                     """
