@@ -136,9 +136,16 @@ class Manifest(object):
             raise NoInitialManifestError(initial_manifest, user_supplied)
 
         message_prefix = "initialmanifest"
-        self.local.run_script(initial_manifest,
-                              env=self.env_initial_manifest(initial_manifest),
-                              message_prefix=message_prefix)
+        which = "init"
+        stderr_path = os.path.join(self.local.init_manifest_stderr_path, which)
+        stdout_path = os.path.join(self.local.init_manifest_stdout_path, which)
+        with open(stderr_path, 'ba+') as stderr, \
+                open(stdout_path, 'ba+') as stdout:
+            self.local.run_script(
+                initial_manifest,
+                env=self.env_initial_manifest(initial_manifest),
+                message_prefix=message_prefix,
+                stdout=stdout, stderr=stderr)
 
     def env_type_manifest(self, cdist_object):
         type_manifest = os.path.join(self.local.type_path,
@@ -162,9 +169,12 @@ class Manifest(object):
         message_prefix = cdist_object.name
         which = 'manifest'
         if os.path.isfile(type_manifest):
-            with open(os.path.join(cdist_object.stderr_path, which), 'ba') as stderr, \
-                open(os.path.join(cdist_object.stdout_path, which), 'ba') as stdout:
-                self.local.run_script(type_manifest,
+            stderr_path = os.path.join(cdist_object.stderr_path, which)
+            stdout_path = os.path.join(cdist_object.stdout_path, which)
+            with open(stderr_path, 'ba+') as stderr, \
+                    open(stdout_path, 'ba+') as stdout:
+                self.local.run_script(
+                    type_manifest,
                     env=self.env_type_manifest(cdist_object),
-                    stdout=stdout, stderr=stderr
-                )
+                    message_prefix=message_prefix,
+                    stdout=stdout, stderr=stderr)

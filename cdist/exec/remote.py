@@ -172,7 +172,7 @@ class Remote(object):
             self.log.debug(("Multiprocessing for parallel transfer "
                             "finished"))
 
-    def run_script(self, script, env=None, return_output=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    def run_script(self, script, env=None, return_output=False, stdout=None, stderr=None):
         """Run the given script with the given environment on the remote side.
         Return the output as a string.
 
@@ -183,7 +183,7 @@ class Remote(object):
 
         return self.run(command, env=env, return_output=return_output, stdout=stdout, stderr=stderr)
 
-    def run(self, command, env=None, return_output=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    def run(self, command, env=None, return_output=False, stdout=None, stderr=None):
         """Run the given command with the given environment on the remote side.
         Return the output as a string.
 
@@ -220,7 +220,7 @@ class Remote(object):
         return self._run_command(cmd, env=env, return_output=return_output,
                                 stdout=stdout, stderr=stderr)
 
-    def _run_command(self, command, env=None, return_output=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    def _run_command(self, command, env=None, return_output=False, stdout=None, stderr=None):
         """Run the given command with the given environment.
         Return the output as a string.
 
@@ -241,9 +241,19 @@ class Remote(object):
         self.log.debug("Remote run: %s", command)
         try:
             if return_output:
-                return subprocess.check_output(command, env=os_environ, stderr=stderr).decode()
+                output = subprocess.check_output(command, env=os_environ, stderr=stderr).decode()
+                if stderr is not None:
+                    stderr.seek(0, 0)
+                    self.log.info("Remote stderr:\n{}\n".format(stderr.read()))
+                return output
             else:
                 subprocess.check_call(command, env=os_environ, stdout=stdout, stderr=stderr)
+                if stderr is not None:
+                    stderr.seek(0, 0)
+                    self.log.info("Remote stderr:\n{}\n".format(stderr.read()))
+                if stdout is not None:
+                    stdout.seek(0, 0)
+                    self.log.info("Remote stdout:\n{}\n".format(stdout.read()))
         except subprocess.CalledProcessError:
             exec_util.handle_called_process_error(e, command)
         except OSError as error:

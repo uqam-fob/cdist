@@ -109,9 +109,15 @@ class Local(object):
                                                      "explorer")
         self.object_path = os.path.join(self.base_path, "object")
         self.messages_path = os.path.join(self.base_path, "messages")
-        self.files_path = os.path.join(self.conf_path, "files")
+        self.init_manifest_out_path = os.path.join(
+            self.base_path, "init_manifest_out")
+        self.init_manifest_stdout_path = os.path.join(
+            self.init_manifest_out_path, "stdout")
+        self.init_manifest_stderr_path = os.path.join(
+            self.init_manifest_out_path, "stderr")
 
         # Depending on conf_path
+        self.files_path = os.path.join(self.conf_path, "files")
         self.global_explorer_path = os.path.join(self.conf_path, "explorer")
         self.manifest_path = os.path.join(self.conf_path, "manifest")
         self.initial_manifest = (self.custom_initial_manifest or
@@ -149,6 +155,9 @@ class Local(object):
         self.mkdir(self.global_explorer_out_path)
         self.mkdir(self.object_path)
         self.mkdir(self.bin_path)
+        self.mkdir(self.init_manifest_out_path)
+        self.mkdir(self.init_manifest_stdout_path)
+        self.mkdir(self.init_manifest_stderr_path)
 
     def create_files_dirs(self):
         self._init_directories()
@@ -185,7 +194,7 @@ class Local(object):
         os.makedirs(path, exist_ok=True)
 
     # FIXME: asteven: save_output probably does not make any sense
-    def run(self, command, env=None, return_output=False, message_prefix=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, save_output=True):
+    def run(self, command, env=None, return_output=False, message_prefix=None, stdout=None, stderr=None, save_output=True):
         """Run the given command with the given environment.
         Return the output as a string.
 
@@ -214,9 +223,19 @@ class Local(object):
 
         try:
             if return_output:
-                return subprocess.check_output(command, env=env, stderr=stderr).decode()
+                output = subprocess.check_output(command, env=env, stderr=stderr).decode()
+                if stderr is not None:
+                    stderr.seek(0, 0)
+                    self.log.info("Local stderr:\n{}\n".format(stderr.read()))
+                return output
             else:
                 subprocess.check_call(command, env=env, stdout=stdout, stderr=stderr)
+                if stderr is not None:
+                    stderr.seek(0, 0)
+                    self.log.info("Local stderr:\n{}\n".format(stderr.read()))
+                if stdout is not None:
+                    stdout.seek(0, 0)
+                    self.log.info("Local stdout:\n{}\n".format(stdout.read()))
         except subprocess.CalledProcessError as e:
             exec_util.handle_called_process_error(e, command)
         except OSError as error:
@@ -225,7 +244,7 @@ class Local(object):
             if message_prefix:
                 message.merge_messages()
 
-    def run_script(self, script, env=None, return_output=False, message_prefix=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    def run_script(self, script, env=None, return_output=False, message_prefix=None, stdout=None, stderr=None):
         """Run the given script with the given environment.
         Return the output as a string.
 
