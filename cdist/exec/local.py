@@ -109,12 +109,10 @@ class Local(object):
                                                      "explorer")
         self.object_path = os.path.join(self.base_path, "object")
         self.messages_path = os.path.join(self.base_path, "messages")
-        self.init_manifest_out_path = os.path.join(
-            self.base_path, "init_manifest_out")
         self.init_manifest_stdout_path = os.path.join(
-            self.init_manifest_out_path, "stdout")
+            self.base_path, "stdout")
         self.init_manifest_stderr_path = os.path.join(
-            self.init_manifest_out_path, "stderr")
+            self.base_path, "stderr")
 
         # Depending on conf_path
         self.files_path = os.path.join(self.conf_path, "files")
