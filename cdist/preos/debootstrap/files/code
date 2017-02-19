@@ -78,6 +78,20 @@ then
     fi
 fi
 
+chroot_mount() {
+    mount -t proc none "${bootstrap_dir}/proc" || true
+    mount -t sysfs none "${bootstrap_dir}/sys" || true
+    mount -o bind /dev "${bootstrap_dir}/dev" || true
+    mount -t devpts none "${bootstrap_dir}/dev/pts" || true
+}
+
+chroot_umount() {
+    umount "${bootstrap_dir}/dev/pts" || true
+    umount "${bootstrap_dir}/dev" || true
+    umount "${bootstrap_dir}/sys" || true
+    umount "${bootstrap_dir}/proc" || true
+}
+
 # config
 if [ "${configure}" ]
 then
@@ -140,14 +154,19 @@ umount \"${bootstrap_dir}/proc\" || true;"
 
     trap "${TRAPFUNC}" 0 1 2 3 15
 
-    mount -t proc none "${bootstrap_dir}/proc" || true
-    mount -t sysfs none "${bootstrap_dir}/sys" || true
-    mount -o bind /dev "${bootstrap_dir}/dev" || true
-    mount -t devpts none "${bootstrap_dir}/dev/pts" || true
+    chroot_mount
 
     chroot "${bootstrap_dir}" /usr/bin/apt-get update
 
-    printf "${trigger_line}${ssh_auth_keys_line}" | cat "${manifest}" - |\
+    if [ "${drive}" ]
+    then
+        grub_manifest_line="__package grub-pc --state present\n"
+    else
+        grub_manifest_line=""
+    fi
+
+    printf "${trigger_line}${ssh_auth_keys_line}${grub_manifest_line}" \
+        | cat "${manifest}" - |\
         cdist config \
             ${cdist_params} -i - \
             --remote-exec "${remote_exec}" \
@@ -162,10 +181,7 @@ umount \"${bootstrap_dir}/proc\" || true;"
     chroot "${bootstrap_dir}" /usr/bin/apt-get clean
     chroot "${bootstrap_dir}" /usr/bin/apt-get autoremove
 
-    umount "${bootstrap_dir}/dev/pts" || true
-    umount "${bootstrap_dir}/dev" || true
-    umount "${bootstrap_dir}/sys" || true
-    umount "${bootstrap_dir}/proc" || true
+    chroot_umount
 
     trap - 0 1 2 3 15
 
@@ -207,6 +223,14 @@ EOPXEF
     then
         echo "pxe creation finished"
     fi
+fi
+
+if [ "${drive}"]
+then
+    chroot_mount
+    chroot "${bootstrap_dir}" grub-install ${drive}
+    chroot "${bootstrap_dir}" GRUB_DISABLE_OS_PROBER=true update-grub
+    chroot_umount
 fi
 
 if [ "${rm_bootstrap_dir}" ]

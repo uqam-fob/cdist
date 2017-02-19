@@ -85,6 +85,10 @@ class Debian(object):
                   " '{}' is used".format(defargs.cdist_params)),
             dest='cdist_params', default=defargs.cdist_params)
         parser.add_argument(
+            '-D', '--drive-boot',
+            help='create bootable PreOS on specified drive',
+            dest='drive')
+        parser.add_argument(
             '-e', '--remote-exec',
             help=("remote exec that cdist config will use, by default "
                   "internal script is used"),
@@ -199,6 +203,8 @@ class Debian(object):
                 info_msg.append(", configuring")
             if args.pxe_boot_dir:
                 info_msg.append(", creating PXE")
+            if args.drive:
+                info_msg.append(", creating bootable drive")
             log.info(info_msg)
             log.debug("cmd={}".format(cmd))
             subprocess.check_call(cmd, env=env, shell=True)
