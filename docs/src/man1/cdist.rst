@@ -53,17 +53,19 @@ SYNOPSIS
     cdist preos [-h] preos
 
     cdist preos debian [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
-                       [-c CDIST_PARAMS] [-e REMOTE_EXEC] [-i MANIFEST]
-                       [-k [KEYFILE [KEYFILE ...]]] [-m MIRROR]
-                       [-p PXE_BOOT_DIR] [-r] [-S SCRIPT] [-s SUITE]
-                       [-t TRIGGER_COMMAND] [-y REMOTE_COPY]
+                       [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
+                       [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
+                       [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
+                       [-S SCRIPT] [-s SUITE] [-t TRIGGER_COMMAND]
+                       [-y REMOTE_COPY]
                        target_dir
 
     cdist preos ubuntu [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
-                       [-c CDIST_PARAMS] [-e REMOTE_EXEC] [-i MANIFEST]
-                       [-k [KEYFILE [KEYFILE ...]]] [-m MIRROR]
-                       [-p PXE_BOOT_DIR] [-r] [-S SCRIPT] [-s SUITE]
-                       [-t TRIGGER_COMMAND] [-y REMOTE_COPY]
+                       [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
+                       [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
+                       [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
+                       [-S SCRIPT] [-s SUITE] [-t TRIGGER_COMMAND]
+                       [-y REMOTE_COPY]
                        target_dir
 
     cdist shell [-h] [-d] [-v] [-s SHELL]
@@ -512,6 +514,10 @@ PREOS DEBIAN
     parameters that will be passed to cdist config, by
     default '-v' is used
 
+.. option:: -D DRIVE, --drive-boot DRIVE
+
+   create bootable PreOS on specified drive
+
 .. option:: -d, --debug
 
     Set log level to debug
@@ -530,7 +536,7 @@ PREOS DEBIAN
     init manifest that cdist config will use, by default
     internal init manifest is used
 
-.. option:: -k [KEYFILE [KEYFILE ...]], --keyfile [KEYFILE [KEYFILE ...]]
+.. option:: -k KEYFILE, --keyfile KEYFILE
 
     ssh key files that will be added to cdist config;
     '``__ssh_authorized_keys root ...``' type is appended to initial manifest
@@ -538,6 +544,10 @@ PREOS DEBIAN
 .. option:: -m MIRROR, --mirror MIRROR
 
     use specified mirror for debootstrap
+
+.. option:: -P ROOT_PASSWORD, --root-password ROOT_PASSWORD
+
+    Set specified password for root, 'password' by default
 
 .. option:: -p PXE_BOOT_DIR, --pxe-boot-dir PXE_BOOT_DIR
 
@@ -600,6 +610,10 @@ PREOS UBUNTU
     parameters that will be passed to cdist config, by
     default '-v' is used
 
+.. option:: -D DRIVE, --drive-boot DRIVE
+
+   create bootable PreOS on specified drive
+
 .. option:: -d, --debug
 
     Set log level to debug
@@ -618,7 +632,7 @@ PREOS UBUNTU
     init manifest that cdist config will use, by default
     internal init manifest is used
 
-.. option:: -k [KEYFILE [KEYFILE ...]], --keyfile [KEYFILE [KEYFILE ...]]
+.. option:: -k KEYFILE, --keyfile KEYFILE
 
     ssh key files that will be added to cdist config;
     '``__ssh_authorized_keys root ...``' type is appended to initial manifest
@@ -626,6 +640,10 @@ PREOS UBUNTU
 .. option:: -m MIRROR, --mirror MIRROR
 
     use specified mirror for debootstrap
+
+.. option:: -P ROOT_PASSWORD, --root-password ROOT_PASSWORD
+
+    Set specified password for root, 'password' by default
 
 .. option:: -p PXE_BOOT_DIR, --pxe-boot-dir PXE_BOOT_DIR
 

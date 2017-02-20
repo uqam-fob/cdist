@@ -230,6 +230,12 @@ then
     chroot_mount
     chroot "${bootstrap_dir}" grub-install ${drive}
     chroot "${bootstrap_dir}" GRUB_DISABLE_OS_PROBER=true update-grub
+    # set root password
+    if [ ! "${root_password}" ]
+    then
+        root_password="password"
+    fi
+    echo "'root:${root_password}'" | chpasswd
     chroot_umount
 fi
 

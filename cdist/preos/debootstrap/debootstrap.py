@@ -54,6 +54,7 @@ class Debian(object):
         defargs.remote_exec = default_remote_exec
         defargs.remote_copy = default_remote_copy
         defargs.manifest = default_init_manifest
+        defargs.root_password = 'password'
 
         return defargs
 
@@ -108,6 +109,11 @@ class Debian(object):
             '-m', '--mirror',
             help='use specified mirror for debootstrap',
             dest='mirror')
+        parser.add_argument(
+            '-P', '--root-password',
+            help='Set specified password for root, \'{}\' by default'.format(
+                defargs.root_password),
+            dest='root_password', default=defargs.root_password)
         parser.add_argument('-p', '--pxe-boot-dir', help='PXE boot directory',
                             dest='pxe_boot_dir')
         parser.add_argument(
