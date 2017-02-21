@@ -234,6 +234,11 @@ then
     # set root password
     if [ ! "${root_password}" ]
     then
+        if which strings >/dev/null 2>&1
+        then
+            printf "strings is missing\n" > &2
+            exit 1
+        fi
         root_password="$(head -n 1000 /dev/urandom | strings | \
             grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n')"
         printf "Generated root password (without quotes):'${root_password}'\n"
