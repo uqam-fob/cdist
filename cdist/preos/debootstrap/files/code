@@ -236,7 +236,7 @@ then
     then
         if which strings >/dev/null 2>&1
         then
-            printf "strings is missing\n" > &2
+            printf "strings is missing\n" >&2
             exit 1
         fi
         root_password="$(head -n 1000 /dev/urandom | strings | \
