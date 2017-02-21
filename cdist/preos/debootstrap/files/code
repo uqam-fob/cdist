@@ -234,9 +234,12 @@ then
     # set root password
     if [ ! "${root_password}" ]
     then
-        root_password="password"
+        root_password="$(head -n 1000 /dev/urandom | strings | \
+            grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n')"
+        printf "Generated root password (without quotes):'${root_password}'\n"
     fi
-    chroot "${bootstrap_dir}" /bin/sh -c "echo \"root:${root_password}\" | chpasswd"
+    chroot "${bootstrap_dir}" /bin/sh -c "echo \"root:${root_password}\" | \
+        chpasswd"
     # Remove securetty due to 'Login incorrect' without password prompt.
     # FIXME Is there a better way?
     rm -f "${bootstrap_dir}"/etc/securetty
