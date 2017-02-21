@@ -200,17 +200,17 @@ class Debian(object):
             info_msg = ["Running preos: {}, suite: {}, arch: {}".format(
                 cls._preos_name, args.suite, args.arch), ]
             if args.mirror:
-                info_msg.append(", mirror: {}".format(args.mirror))
+                info_msg.append("mirror: {}".format(args.mirror))
             if args.script:
-                info_msg.append(", script: {}".format(args.script))
+                info_msg.append("script: {}".format(args.script))
             if args.bootstrap:
-                info_msg.append(", bootstrapping")
+                info_msg.append("bootstrapping")
             if args.configure:
-                info_msg.append(", configuring")
+                info_msg.append("configuring")
             if args.pxe_boot_dir:
-                info_msg.append(", creating PXE")
+                info_msg.append("creating PXE")
             if args.drive:
-                info_msg.append(", creating bootable drive")
+                info_msg.append("creating bootable drive")
             log.info(info_msg)
             log.debug("cmd={}".format(cmd))
             subprocess.check_call(cmd, env=env, shell=True)

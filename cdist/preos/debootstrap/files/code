@@ -92,6 +92,11 @@ chroot_umount() {
     umount "${bootstrap_dir}/proc" || true
 }
 
+TRAPFUNC="umount \"${bootstrap_dir}/dev/pts\" || true; \
+umount \"${bootstrap_dir}/dev\" || true; \
+umount \"${bootstrap_dir}/sys\" || true; \
+umount \"${bootstrap_dir}/proc\" || true;"
+
 # config
 if [ "${configure}" ]
 then
@@ -146,11 +151,6 @@ then
     then
         echo "configuring..."
     fi
-
-    TRAPFUNC="umount \"${bootstrap_dir}/dev/pts\" || true; \
-umount \"${bootstrap_dir}/dev\" || true; \
-umount \"${bootstrap_dir}/sys\" || true; \
-umount \"${bootstrap_dir}/proc\" || true;"
 
     trap "${TRAPFUNC}" 0 1 2 3 15
 
@@ -225,18 +225,23 @@ EOPXEF
     fi
 fi
 
-if [ "${drive}"]
+if [ "${drive}" ]
 then
+    trap "${TRAPFUNC}" 0 1 2 3 15
     chroot_mount
     chroot "${bootstrap_dir}" grub-install ${drive}
-    chroot "${bootstrap_dir}" GRUB_DISABLE_OS_PROBER=true update-grub
+    chroot "${bootstrap_dir}" /bin/sh -c "GRUB_DISABLE_OS_PROBER=true update-grub"
     # set root password
     if [ ! "${root_password}" ]
     then
         root_password="password"
     fi
-    echo "'root:${root_password}'" | chpasswd
+    chroot "${bootstrap_dir}" /bin/sh -c "echo \"root:${root_password}\" | chpasswd"
+    # Remove securetty due to 'Login incorrect' without password prompt.
+    # FIXME Is there a better way?
+    rm -f "${bootstrap_dir}"/etc/securetty
     chroot_umount
+    trap - 0 1 2 3 15
 fi
 
 if [ "${rm_bootstrap_dir}" ]
