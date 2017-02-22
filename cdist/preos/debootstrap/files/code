@@ -245,9 +245,8 @@ then
     fi
     chroot "${bootstrap_dir}" /bin/sh -c "echo \"root:${root_password}\" | \
         chpasswd"
-    # Remove securetty due to 'Login incorrect' without password prompt.
-    # FIXME Is there a better way?
-    rm -f "${bootstrap_dir}"/etc/securetty
+    # /etc/securetty must not be world writeable.
+    chmod 644 "${bootstrap_dir}"/etc/securetty
     chroot_umount
     trap - 0 1 2 3 15
 fi
