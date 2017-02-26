@@ -877,6 +877,13 @@ EXAMPLES
         -k ~/.ssh/id_rsa.pub -p /preos/pxe-ubuntu \
         -t "/usr/bin/curl 192.168.111.5:3000/install/"
 
+    # Create ubuntu PreOS on drive /dev/sdb with install trigger command
+    # and set root password to 'password'.
+    $ cdist preos ubuntu /mnt -b -B -C \
+        -k ~/.ssh/id_rsa.pub -D /dev/sdb \
+        -t "/usr/bin/curl 192.168.111.5:3000/install/" \
+        -P password
+
     # Start trigger in verbose mode that will configure host using specified
     # init manifest
     % cdist trigger -b -v -i ~/.cdist/manifest/init-for-triggered
