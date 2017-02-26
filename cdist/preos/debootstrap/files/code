@@ -166,11 +166,16 @@ then
     if [ "${drive}" ]
     then
         grub_manifest_line="__package grub-pc --state present\n"
+        grub_kern_params_line="__line linux_kernel_params 
+--file /etc/default/grub 
+--line \'GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash net.ifnames=0\"\'\n"
     else
         grub_manifest_line=""
+        grub_kern_params_line=""
     fi
+    grub_lines="${grub_manifest_line}${grub_kern_params_line}"
 
-    printf "${trigger_line}${ssh_auth_keys_line}${grub_manifest_line}" \
+    printf "${trigger_line}${ssh_auth_keys_line}${grub_lines}" \
         | cat "${manifest}" - |\
         cdist config \
             ${cdist_params} -i - \
