@@ -168,7 +168,7 @@ then
         grub_manifest_line="__package grub-pc --state present\n"
         grub_kern_params_line="__line linux_kernel_params \
 --file /etc/default/grub \
---line \'GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash net.ifnames=0\"\'\n"
+--line 'GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash net.ifnames=0\"'\n"
     else
         grub_manifest_line=""
         grub_kern_params_line=""
