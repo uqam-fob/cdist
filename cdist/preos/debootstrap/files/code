@@ -53,16 +53,21 @@ then
         exit 1
     }
 
-    if [ -e "${bootstrap_dir}" ]
+    # If PreOS on drive then do not check for directory emptiness.
+    # Partition can at least contain 'lost+found' directory.
+    if [ ! "${drive}" ]
     then
-        dir_content=$(ls -A "${bootstrap_dir}" | wc -l)
-    else
-        dir_content=0
-    fi
-    if [ "${dir_content}" -ne 0 ]
-    then
-        echo "ERROR: "${bootstrap_dir}" not empty " >&2
-        exit 1
+        if [ -e "${bootstrap_dir}" ]
+        then
+            dir_content=$(ls -A "${bootstrap_dir}" | wc -l)
+        else
+            dir_content=0
+        fi
+        if [ "${dir_content}" -ne 0 ]
+        then
+            echo "ERROR: "${bootstrap_dir}" not empty " >&2
+            exit 1
+        fi
     fi
 
     if [ "${verbose}" -o "${debug}" ]
