@@ -143,6 +143,10 @@ class Debian(object):
         return parser
 
     @classmethod
+    def update_env(cls, env):
+        pass
+
+    @classmethod
     def commandline(cls, argv):
         log = logging.getLogger(cls.__name__)
 
@@ -193,6 +197,7 @@ class Debian(object):
                     new_env[key] = str(env[key])
             env = new_env
             env.update(os.environ)
+            cls.update_env(env)
             log.debug("preos: {} env: {}".format(cls._preos_name, env))
             cmd = os.path.join(cls._files_dir, "code")
             info_msg = ["Running preos: {}, suite: {}, arch: {}".format(
@@ -224,3 +229,17 @@ class Ubuntu(Debian):
         defargs = super().default_args()
         defargs.suite = 'xenial'
         return defargs
+
+class Devuan(Debian):
+    _preos_name = "devuan"
+
+    @classmethod
+    def default_args(cls):
+        defargs = super().default_args()
+        defargs.suite = 'jessie'
+        return defargs
+
+    @lcassmethod
+    def update_env(cls, env):
+        env['DEBOOTSTRAP_DIR'] = os.path.join(cls._files_dir,
+                                              'devuan-debootstrap')

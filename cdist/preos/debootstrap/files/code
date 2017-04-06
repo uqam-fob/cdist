@@ -48,10 +48,16 @@ check_bootstrap_dir() {
 # bootstrap
 if [ "${bootstrap}" ]
 then
-    command -v debootstrap 2>&1 > /dev/null || {
-        echo "ERROR: debootstrap not found" >&2
-        exit 1
-    }
+    if [ "${DEBOOTSTRAP_DIR}" ]
+    then
+        debootstrap_cmd="${DEBOOTSTRAP_DIR}/debootstrap"
+    else
+        command -v debootstrap 2>&1 > /dev/null || {
+            echo "ERROR: debootstrap not found" >&2
+            exit 1
+        }
+        debootstrap_cmd="debootstrap"
+    fi
 
     # If PreOS on drive then do not check for directory emptiness.
     # Partition can at least contain 'lost+found' directory.
@@ -75,7 +81,7 @@ then
         echo "bootstrapping..."
     fi
     mkdir -p "${bootstrap_dir}"
-    debootstrap --include=openssh-server --arch=${arch} ${suite} ${bootstrap_dir} \
+    "${debootstrap_cmd}" --include=openssh-server --arch=${arch} ${suite} ${bootstrap_dir} \
         ${mirror} ${script}
     if [ "${verbose}" -o "${debug}" ]
     then
