@@ -1,1 +1,1 @@
-from debootstrap.debootstrap import Debian, Ubuntu
+from debootstrap.debootstrap import Debian, Ubuntu, Devuan

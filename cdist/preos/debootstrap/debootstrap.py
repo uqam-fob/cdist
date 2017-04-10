@@ -239,7 +239,7 @@ class Devuan(Debian):
         defargs.suite = 'jessie'
         return defargs
 
-    @lcassmethod
+    @classmethod
     def update_env(cls, env):
         env['DEBOOTSTRAP_DIR'] = os.path.join(cls._files_dir,
                                               'devuan-debootstrap')
