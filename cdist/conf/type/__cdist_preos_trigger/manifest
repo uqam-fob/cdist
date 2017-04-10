@@ -14,7 +14,7 @@ case "$os" in
 
 ### BEGIN INIT INFO
 # Provides:          cdist-preos-trigger
-# Required-Start:    $all
+# Required-Start:    \$all
 # Required-Stop:
 # Default-Start:     2 3 4 5 S
 # Default-Stop:      0 1 6
@@ -22,14 +22,13 @@ case "$os" in
 # Description:       Execute cdist preos trigger commnad.
 ### END INIT INFO
 
-case "$1" in
+case "\$1" in
     start)
         echo "Starting cdist-preos-trigger command"
         ${trigger_command} &
         ;;
     stop)
-        echo "Stopping cdist-preos-trigger command"
-        killall ${trigger_command}
+        # no-op
         ;;
     *)
         echo "Usage: /etc/init.d/cdist-preos-trigger {start|stop}"
