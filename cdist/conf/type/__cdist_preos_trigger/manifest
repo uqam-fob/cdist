@@ -39,9 +39,6 @@ esac
 
 exit 0
 EOF
-
-        require="__file/etc/init.d/cdist-preos-trigger" \
-            __start_on_boot cdist-preos-trigger
     ;;
     *)
         __file /etc/systemd/system/cdist-preos-trigger.service --owner root \
