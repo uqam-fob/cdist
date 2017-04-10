@@ -5,7 +5,7 @@ trigger_command=$(cat "$__object/parameter/trigger-command")
 
 case "$os" in
     devuan)
-        __file /etc/init.d/cdist-preos-trigger--owner root \
+        __file /etc/init.d/cdist-preos-trigger --owner root \
             --group root \
             --mode 755 \
             --source - << EOF
