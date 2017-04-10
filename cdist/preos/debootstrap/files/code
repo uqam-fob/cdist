@@ -28,7 +28,7 @@ fi
 bootstrap_dir="${target_dir}"
 
 case "${os}" in
-    ubuntu|debian)
+    ubuntu|debian|devuan)
         # nothing, those are valid values
         ;;
     *)
