@@ -60,6 +60,14 @@ SYNOPSIS
                        [-y REMOTE_COPY]
                        target_dir
 
+    cdist preos devuan [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
+                       [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
+                       [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
+                       [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
+                       [-S SCRIPT] [-s SUITE] [-t TRIGGER_COMMAND]
+                       [-y REMOTE_COPY]
+                       target_dir
+
     cdist preos ubuntu [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
                        [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
                        [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
@@ -484,10 +492,11 @@ Create PreOS. Currently, the following PreOS-es are supported:
 
 * debian
 * ubuntu
+* devuan
 
 
-PREOS DEBIAN
-------------
+PREOS DEBIAN/DEVUAN
+-------------------
 
 .. option:: target_dir
 

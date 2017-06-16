@@ -14,7 +14,8 @@ With cdist you can create PreOS.
 Currently supported PreOS-es include:
 
 * debian
-* ubuntu.
+* ubuntu
+* devuan.
 
 PreOS is created using cdist preos command. preos command has subcommands that
 create the desired PreOS.
