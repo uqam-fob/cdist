@@ -243,6 +243,9 @@ __target_fqdn
     This variable is derived from **__target_host**
     (using **socket.getfqdn()**).
     Available for: explorer, initial manifest, type explorer, type manifest, type gencode, shell.
+__target_host_tags
+    Comma separated list of target host tags.
+    Available for: explorer, initial manifest, type explorer, type manifest, type gencode, shell.
 __type
     Path to the current type.
     Available for: type manifest, type gencode.
