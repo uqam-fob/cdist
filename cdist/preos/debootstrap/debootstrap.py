@@ -230,6 +230,7 @@ class Ubuntu(Debian):
         defargs.suite = 'xenial'
         return defargs
 
+
 class Devuan(Debian):
     _preos_name = "devuan"
 
