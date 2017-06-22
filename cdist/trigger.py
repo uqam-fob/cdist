@@ -174,9 +174,10 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
         host_base_path, hostdir = theclass.create_host_base_dirs(
             host, theclass.create_base_root_path(out_path))
         theclass.construct_remote_exec_copy_patterns(self.cdistargs)
-        log.debug("Executing cdist onehost with params: %s, %s, %s, %s, ",
-                  host, host_base_path, hostdir, self.cdistargs)
-        theclass.onehost(host, host_base_path, hostdir, self.cdistargs,
+        host_tags = None
+        log.debug("Executing cdist onehost with params: %s, %s, %s, %s, %s, ",
+                  host, host_tags, host_base_path, hostdir, self.cdistargs)
+        theclass.onehost(host, host_tags, host_base_path, hostdir, self.cdistargs,
                          parallel=False)
 
 
