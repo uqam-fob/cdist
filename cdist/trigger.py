@@ -31,8 +31,10 @@ import shutil
 
 import cdist.config
 import cdist.install
+import cdist.log
 
-log = logging.getLogger(__name__)
+
+log = logging.getLogger("trigger")
 
 
 class Trigger():
@@ -43,7 +45,6 @@ class Trigger():
 
     def __init__(self, http_port=None, dry_run=False, ipv6=False,
                  directory=None, source=None, cdistargs=None):
-        self.log = logging.getLogger("trigger")
         self.dry_run = dry_run
         self.http_port = int(http_port)
         self.ipv6 = ipv6
@@ -177,8 +178,8 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
         host_tags = None
         log.debug("Executing cdist onehost with params: %s, %s, %s, %s, %s, ",
                   host, host_tags, host_base_path, hostdir, self.cdistargs)
-        theclass.onehost(host, host_tags, host_base_path, hostdir, self.cdistargs,
-                         parallel=False)
+        theclass.onehost(host, host_tags, host_base_path, hostdir,
+                         self.cdistargs, parallel=False)
 
 
 class HTTPServerV6(socketserver.ForkingMixIn, http.server.HTTPServer):

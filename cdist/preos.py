@@ -20,8 +20,6 @@ if cdist_home:
 sys.path.extend(_PLUGINS_PATH)
 
 
-logging.setLoggerClass(cdist.log.Log)
-logging.basicConfig(format='%(levelname)s: %(message)s')
 log = logging.getLogger("PreOS")
 
 

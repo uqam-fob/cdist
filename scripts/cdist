@@ -34,6 +34,7 @@ def commandline():
     import cdist.install
     import cdist.shell
     import cdist.inventory
+    import cdist.preos
     import cdist.trigger
     import shutil
     import os
@@ -86,10 +87,14 @@ if __name__ == "__main__":
         import re
         import cdist
         import cdist.log
-        import cdist.preos
 
         logging.setLoggerClass(cdist.log.Log)
-        logging.basicConfig(format='%(levelname)s: %(message)s')
+        # trigger logging format hack :)
+        if len(sys.argv) > 1 and sys.argv[1] == 'trigger':
+            logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+        else:
+            logging.basicConfig(format='%(levelname)s: %(message)s')
+
         log = logging.getLogger("cdist")
 
         if re.match("__", os.path.basename(sys.argv[0])):
