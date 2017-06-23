@@ -32,6 +32,7 @@ import shutil
 import cdist.config
 import cdist.install
 import cdist.log
+import cdist.ipaddr as ipaddr
 
 
 log = logging.getLogger("trigger")
@@ -176,9 +177,17 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
             host, theclass.create_base_root_path(out_path))
         theclass.construct_remote_exec_copy_patterns(self.cdistargs)
         host_tags = None
+        host_name = ipaddr.resolve_target_host_name(host)
+        log.debug('Resolved target host name: %s', host_name)
+        if host_name:
+            target_host = host_name
+        else:
+            target_host = host
+        log.debug('Using target_host: %s', target_host)
         log.debug("Executing cdist onehost with params: %s, %s, %s, %s, %s, ",
-                  host, host_tags, host_base_path, hostdir, self.cdistargs)
-        theclass.onehost(host, host_tags, host_base_path, hostdir,
+                  target_host, host_tags, host_base_path, hostdir,
+                  self.cdistargs)
+        theclass.onehost(target_host, host_tags, host_base_path, hostdir,
                          self.cdistargs, parallel=False)
 
 
