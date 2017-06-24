@@ -32,7 +32,7 @@ import shutil
 import cdist.config
 import cdist.install
 import cdist.log
-import cdist.ipaddr as ipaddr
+import cdist.util.ipaddr as ipaddr
 
 
 log = logging.getLogger("trigger")
