@@ -136,10 +136,13 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
             log.debug("Calling {} -> {}".format(subsystem, action))
             try:
                 handler(action, host)
-            except Exception as e:
+            except cdist.Error as e:
                 # cdist is not broken, cdist run is broken
                 code = 599  # use arbitrary unassigned error code
                 message = str(e)
+            except Exception as e:
+                # cdist/trigger server is broken
+                code = 500
 
         self.send_response(code=code, message=message)
         self.end_headers()
