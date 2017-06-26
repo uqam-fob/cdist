@@ -705,10 +705,19 @@ TRIGGER
 Start trigger (simple http server) that waits for connections. When host
 connects then it triggers config or install command and then cdist
 config/install is executed which configures/installs host.
+When triggered cdist will try to reverse DNS lookup for host name and if
+host name is dervied then it is used for running cdist config. If no
+host name is resolved then IP address is used.
 Request path recognizes following requests:
 
-* :strong:`/config/.*` for config
-* :strong:`/install/.*` for install.
+* :strong:`/cdist/config/.*` for config
+* :strong:`/cdist/install/.*` for install.
+
+This command returns the following response codes to client requests:
+
+* 200 for success
+* 599 for cdist run errors
+* 500 for cdist/server errors.
 
 
 .. option:: -6, --ipv6
