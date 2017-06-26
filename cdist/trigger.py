@@ -115,6 +115,8 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
     def dispatch_request(self):
         host = self.client_address[0]
         code = 200
+        message = None
+        explain = None
 
         self.cdistargs = self.server.cdistargs
 
@@ -133,9 +135,17 @@ class TriggerHttp(http.server.BaseHTTPRequestHandler):
 
         if code == 200:
             log.debug("Calling {} -> {}".format(subsystem, action))
-            handler(action, host)
+            try:
+                handler(action, host)
+            except Exception as e:
+                code = 599  # use arbitrary unassigned 5xx error code
+                explain = 'cdist trigger error'
+                message = str(e)
 
-        self.send_response(code)
+        if code == 200:
+            self.send_response(code)
+        else:
+            self.send_error(code=code, message=message, explain=explain)
         self.end_headers()
 
     def handler_file(self, action, host):
