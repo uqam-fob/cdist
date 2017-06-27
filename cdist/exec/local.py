@@ -156,6 +156,7 @@ class Local(object):
         self.mkdir(self.init_manifest_out_path)
         self.mkdir(self.init_manifest_stdout_path)
         self.mkdir(self.init_manifest_stderr_path)
+        self.mkdir(self.cache_path)
 
     def create_files_dirs(self):
         self._init_directories()
