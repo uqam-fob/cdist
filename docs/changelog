@@ -7,6 +7,10 @@ next:
 	* Core: Add preos functionality (Darko Poljak)
 	* Core: Add inventory functionality (Darko Poljak)
 	* Core: Expose inventory host tags in __target_host_tags env var (Darko Poljak)
+	* Types: Fix install types (Steven Armstrong)
+	* Core: Add -r command line option for setting remote base path (Steven Armstrong)
+	* Core: Allow manifest and gencode scripts to be written in any language (Darko Poljak)
+	* Documentation: Improvements to the english and fix typos (Mesar Hameed)
 
 4.4.4: 2017-06-16
 	* Core: Support -j parallelization for object prepare and object run (Darko Poljak)
