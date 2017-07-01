@@ -120,22 +120,6 @@ class Config(object):
             args.manifest = initial_manifest_temp_path
             atexit.register(lambda: os.remove(initial_manifest_temp_path))
 
-        # default remote cmd patterns
-        args.remote_exec_pattern = None
-        args.remote_copy_pattern = None
-
-        args_dict = vars(args)
-        # if remote-exec and/or remote-copy args are None then user
-        # didn't specify command line options nor env vars:
-        # inspect multiplexing options for default cdist.REMOTE_COPY/EXEC
-        if (args_dict['remote_copy'] is None or
-                args_dict['remote_exec'] is None):
-            mux_opts = inspect_ssh_mux_opts()
-            if args_dict['remote_exec'] is None:
-                args.remote_exec_pattern = cdist.REMOTE_EXEC + mux_opts
-            if args_dict['remote_copy'] is None:
-                args.remote_copy_pattern = cdist.REMOTE_COPY + mux_opts
-
     @classmethod
     def commandline(cls, args):
         """Configure remote system"""
