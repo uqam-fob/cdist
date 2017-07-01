@@ -18,13 +18,15 @@ SYNOPSIS
     cdist config [-h] [-d] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                  [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
                  [--remote-copy REMOTE_COPY] [--remote-exec REMOTE_EXEC]
-                 [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p] [-s] [-t]
+                 [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p]
+                 [-r REMOTE_OUT_PATH] [-s] [-t]
                  [host [host ...]] 
 
     cdist install [-h] [-d] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                   [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
                   [--remote-copy REMOTE_COPY] [--remote-exec REMOTE_EXEC]
-                  [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p] [-s] [-t]
+                  [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p]
+                  [-r REMOTE_OUT_PATH] [-s] [-t]
                   [host [host ...]] 
 
     cdist inventory [-h] [-d] [-v] [-b] [-I INVENTORY_DIR]

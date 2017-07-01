@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # 2010-2015 Nico Schottelius (nico-cdist at schottelius.org)
-# 2016 Darko Poljak (darko.poljak at gmail.com)
+# 2016-2017 Darko Poljak (darko.poljak at gmail.com)
 #
 # This file is part of cdist.
 #

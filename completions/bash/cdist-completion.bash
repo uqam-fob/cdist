@@ -75,6 +75,7 @@ _cdist()
                 -I --inventory -C --cache-path-pattern -c --conf-dir \
                 -f --file -i --initial-manifest -A --all-tagged \
                 -j --jobs -n --dry-run -o --out-dir -p --parallel \
+                -r --remote-out-dir \
                 -s --sequential --remote-copy --remote-exec -t --tag -a --all"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# 2016 Darko Poljak (darko.poljak at gmail.com)
+# 2016-2017 Darko Poljak (darko.poljak at gmail.com)
 #
 # This file is part of cdist.
 #

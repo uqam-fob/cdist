@@ -2,7 +2,7 @@
 #
 # 2011 Steven Armstrong (steven-cdist at armstrong.cc)
 # 2011-2015 Nico Schottelius (nico-cdist at schottelius.org)
-# 2016 Darko Poljak (darko.poljak at gmail.com)
+# 2016-2017 Darko Poljak (darko.poljak at gmail.com)
 #
 # This file is part of cdist.
 #
@@ -245,11 +245,11 @@ class Local(object):
         """
         if os.access(script, os.X_OK):
             self.log.debug('%s is executable, running it', script)
-            command=[script]
+            command = [script]
         else:
             command = [os.environ.get('CDIST_LOCAL_SHELL', "/bin/sh"), "-e"]
             self.log.debug('%s is NOT executable, running it with %s',
-                      script, " ".join(command))
+                           script, " ".join(command))
             command.append(script)
 
         return self.run(command=command, env=env, return_output=return_output,
