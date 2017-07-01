@@ -10,7 +10,7 @@ import collections
 BETA_COMMANDS = set(('install', 'inventory', 'preos', 'trigger', ))
 # set of beta arguments for sub-commands
 BETA_ARGS = {
-    'config': set(('jobs', 'tag', 'all_tagged_hosts', 'cache_path_pattern', )),
+    'config': set(('jobs', 'tag', 'all_tagged_hosts', )),
 }
 EPILOG = "Get cdist at http://www.nico.schottelius.org/software/cdist/"
 # Parser others can reuse
