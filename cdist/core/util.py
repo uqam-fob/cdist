@@ -1,6 +1,6 @@
-#!/bin/sh -e
+# -*- coding: utf-8 -*-
 #
-# 2016 Ander Punnar (cdist at kvlt.ee)
+# 2017 Darko Poljak (darko.poljak at gmail.com)
 #
 # This file is part of cdist.
 #
@@ -17,14 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with cdist. If not, see <http://www.gnu.org/licenses/>.
 #
+#
 
-if [ -f "$__object/parameter/name" ]; then
-    name="$(cat "$__object/parameter/name")"
-else
-    name="$__object_id"
-fi
+import os
 
-dpkg-query --show --showformat '${Status}' "$name" 2>/dev/null \
-    | grep -Fq 'ok installed' \
-    && echo 0 \
-    || echo 1
+
+def listdir(path='.', include_dot=False):
+    """os.listdir but do not include entries whose names begin with a dot('.')
+       if include_dot is False.
+    """
+    if include_dot:
+        return os.listdir(path)
+    else:
+        return [x for x in os.listdir(path) if not _ishidden(x)]
+
+
+def _ishidden(path):
+    return path[0] in ('.', b'.'[0])
