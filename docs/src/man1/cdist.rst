@@ -83,8 +83,8 @@ SYNOPSIS
     cdist trigger [-h] [-q] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                   [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
                   [-r REMOTE_OUT_PATH] [--remote-copy REMOTE_COPY]
-                  [--remote-exec REMOTE_EXEC] [-6] [-H HTTP_PORT]
-                  [-D DIRECTORY] [-S SOURCE]
+                  [--remote-exec REMOTE_EXEC] [-6] [-D DIRECTORY]
+                  [-H HTTP_PORT] [-S SOURCE]
 
 
 DESCRIPTION
@@ -725,6 +725,9 @@ This command returns the following response codes to client requests:
 
     Add configuration directory (can be repeated, last one wins)
 
+.. option:: -D DIRECTORY, --directory DIRECTORY
+    Where to create local files
+
 .. option:: -H HTTP_PORT, --http-port HTTP_PORT
 
     Create trigger listener via http on specified port
@@ -757,6 +760,9 @@ This command returns the following response codes to client requests:
 .. option:: --remote-exec REMOTE_EXEC
 
     Command to use for remote execution (should behave like ssh)
+
+.. option:: -S SOURCE, --source SOURCE
+    Which file to copy for creation
 
 
 FILES

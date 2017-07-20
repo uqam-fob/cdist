@@ -378,11 +378,11 @@ def get_parsers():
             help=('Listen to both IPv4 and IPv6 (instead of only IPv4)'),
             action='store_true')
     parser['trigger'].add_argument(
-            '-H', '--http-port', action='store', default=3000, required=False,
-            help=('Create trigger listener via http on specified port'))
-    parser['trigger'].add_argument(
             '-D', '--directory', action='store', required=False,
             help=('Where to create local files'))
+    parser['trigger'].add_argument(
+            '-H', '--http-port', action='store', default=3000, required=False,
+            help=('Create trigger listener via http on specified port'))
     parser['trigger'].add_argument(
             '-S', '--source', action='store', required=False,
             help=('Which file to copy for creation'))
