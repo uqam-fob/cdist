@@ -870,7 +870,7 @@ EXAMPLES
 
     # Create default debian PreOS in debug mode with config
     # trigger command
-    $ cdist preos debian /preos/preos-debian -b -d -C \
+    $ cdist preos debian /preos/preos-debian -b -vvvv -C \
         -k ~/.ssh/id_rsa.pub -p /preos/pxe-debian \
         -t "/usr/bin/curl 192.168.111.5:3000/config/"
 
