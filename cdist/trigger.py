@@ -35,9 +35,6 @@ import cdist.log
 import cdist.util.ipaddr as ipaddr
 
 
-log = logging.getLogger("trigger")
-
-
 class Trigger():
     """cdist trigger handling"""
 
@@ -77,6 +74,13 @@ class Trigger():
 
     @classmethod
     def commandline(cls, args):
+        global log
+
+        # remove root logger default cdist handler and configure trigger's own
+        logging.getLogger().handlers = []
+        logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+
+        log = logging.getLogger("trigger")
         ownargs = {}
         for targ in cls.triggers_args:
             arg = getattr(args, targ)
