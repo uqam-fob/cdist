@@ -168,6 +168,10 @@ def get_parsers():
     # if set; if not then None - these will be futher handled after
     # parsing to determine implementation default
     parser['config_main'].add_argument(
+           '-r', '--remote-out-dir',
+           help='Directory to save cdist output in on the target host',
+           dest="remote_out_path")
+    parser['config_main'].add_argument(
            '--remote-copy',
            help='Command to use for remote copy (should behave like scp)',
            action='store', dest='remote_copy',
@@ -203,10 +207,6 @@ def get_parsers():
            '-p', '--parallel',
            help='operate on multiple hosts in parallel',
            action='store_true', dest='parallel')
-    parser['config_args'].add_argument(
-           '-r', '--remote-out-dir',
-           help='Directory to save cdist output in on the target host',
-           dest="remote_out_path")
     parser['config_args'].add_argument(
            '-s', '--sequential',
            help='operate on multiple hosts sequentially (default)',

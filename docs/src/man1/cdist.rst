@@ -11,50 +11,50 @@ SYNOPSIS
 
 ::
 
-    cdist [-h] [-v] [-V] {banner,config,install,inventory,preos,shell,trigger} ...
+    cdist [-h] [-q] [-v] [-V] {banner,config,install,inventory,preos,shell,trigger} ...
 
-    cdist banner [-h] [-v]
+    cdist banner [-h] [-q] [-v]
 
-    cdist config [-h] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
+    cdist config [-h] [-q] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                  [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
-                 [--remote-copy REMOTE_COPY] [--remote-exec REMOTE_EXEC]
-                 [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p]
-                 [-r REMOTE_OUT_PATH] [-s] [-t]
+                 [-r REMOTE_OUT_DIR] [--remote-copy REMOTE_COPY]
+                 [--remote-exec REMOTE_EXEC] [-I INVENTORY_DIR] [-A] [-a]
+                 [-f HOSTFILE] [-p] [-s] [-t]
                  [host [host ...]] 
 
-    cdist install [-h] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
+    cdist install [-h] [-q] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                   [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
-                  [--remote-copy REMOTE_COPY] [--remote-exec REMOTE_EXEC]
-                  [-I INVENTORY_DIR] [-A] [-a] [-f HOSTFILE] [-p]
-                  [-r REMOTE_OUT_PATH] [-s] [-t]
+                  [-r REMOTE_OUT_DIR] [--remote-copy REMOTE_COPY]
+                  [--remote-exec REMOTE_EXEC] [-I INVENTORY_DIR] [-A] [-a]
+                  [-f HOSTFILE] [-p] [-s] [-t]
                   [host [host ...]] 
 
-    cdist inventory [-h] [-d] [-v] [-b] [-I INVENTORY_DIR]
+    cdist inventory [-h] [-q] [-v] [-b] [-I INVENTORY_DIR]
                     {add-host,add-tag,del-host,del-tag,list} ...
 
-    cdist inventory add-host [-h] [-d] [-v] [-b] [-I INVENTORY_DIR]
+    cdist inventory add-host [-h] [-q] [-v] [-b] [-I INVENTORY_DIR]
                              [-f HOSTFILE]
                              [host [host ...]]
 
-    cdist inventory add-tag [-h] [-d] [-v] [-b] [-I INVENTORY_DIR]
+    cdist inventory add-tag [-h] [-q] [-v] [-b] [-I INVENTORY_DIR]
                             [-f HOSTFILE] [-T TAGFILE] [-t TAGLIST]
                             [host [host ...]]
 
-    cdist inventory del-host [-h] [-d] [-v] [-b] [-I INVENTORY_DIR] [-a]
+    cdist inventory del-host [-h] [-q] [-v] [-b] [-I INVENTORY_DIR] [-a]
                              [-f HOSTFILE]
                              [host [host ...]]
 
-    cdist inventory del-tag [-h] [-d] [-v] [-b] [-I INVENTORY_DIR] [-a]
+    cdist inventory del-tag [-h] [-q] [-v] [-b] [-I INVENTORY_DIR] [-a]
                             [-f HOSTFILE] [-T TAGFILE] [-t TAGLIST]
                             [host [host ...]]
 
-    cdist inventory list [-h] [-d] [-v] [-b] [-I INVENTORY_DIR] [-a]
+    cdist inventory list [-h] [-q] [-v] [-b] [-I INVENTORY_DIR] [-a]
                          [-f HOSTFILE] [-H] [-t]
                          [host [host ...]]
 
     cdist preos [-h] preos
 
-    cdist preos debian [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
+    cdist preos debian [-h] [-q] [-v] [-b] [-a ARCH] [-B] [-C]
                        [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
                        [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
                        [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
@@ -62,7 +62,7 @@ SYNOPSIS
                        [-y REMOTE_COPY]
                        target_dir
 
-    cdist preos devuan [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
+    cdist preos devuan [-h] [-q] [-v] [-b] [-a ARCH] [-B] [-C]
                        [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
                        [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
                        [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
@@ -70,7 +70,7 @@ SYNOPSIS
                        [-y REMOTE_COPY]
                        target_dir
 
-    cdist preos ubuntu [-h] [-d] [-v] [-b] [-a ARCH] [-B] [-C]
+    cdist preos ubuntu [-h] [-q] [-v] [-b] [-a ARCH] [-B] [-C]
                        [-c CDIST_PARAMS] [-D DRIVE] [-e REMOTE_EXEC]
                        [-i MANIFEST] [-k KEYFILE ] [-m MIRROR]
                        [-P ROOT_PASSWORD] [-p PXE_BOOT_DIR] [-r]
@@ -78,12 +78,13 @@ SYNOPSIS
                        [-y REMOTE_COPY]
                        target_dir
 
-    cdist shell [-h] [-v] [-s SHELL]
+    cdist shell [-h] [-q] [-v] [-s SHELL]
 
-    cdist trigger [-h] [-d] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
+    cdist trigger [-h] [-q] [-v] [-b] [-C CACHE_PATH_PATTERN] [-c CONF_DIR]
                   [-i MANIFEST] [-j [JOBS]] [-n] [-o OUT_PATH]
-                  [--remote-copy REMOTE_COPY] [--remote-exec REMOTE_EXEC]
-                  [-6] [-H HTTP_PORT]
+                  [-r REMOTE_OUT_PATH] [--remote-copy REMOTE_COPY]
+                  [--remote-exec REMOTE_EXEC] [-6] [-H HTTP_PORT]
+                  [-D DIRECTORY] [-S SOURCE]
 
 
 DESCRIPTION
@@ -200,7 +201,7 @@ Configure/install one or more hosts.
 
     Operate on multiple hosts in parallel
 
-.. option:: -r, --remote-out-dir
+.. option:: -r REMOTE_OUT_PATH, --remote-out-dir REMOTE_OUT_PATH
 
     Directory to save cdist output in on the target host
 
@@ -536,18 +537,10 @@ PREOS DEBIAN/DEVUAN
 
    create bootable PreOS on specified drive
 
-.. option:: -d, --debug
-
-    Set log level to debug
-
 .. option:: -e REMOTE_EXEC, --remote-exec REMOTE_EXEC
 
     remote exec that cdist config will use, by default
     internal script is used
-
-.. option:: -h, --help
-
-    show this help message and exit
 
 .. option:: -i MANIFEST, --init-manifest MANIFEST
 
@@ -587,10 +580,6 @@ PREOS DEBIAN/DEVUAN
 
     trigger command that will be added to cdist config;
     '``__cdist_preos_trigger http ...``' type is appended to initial manifest
-
-.. option:: -v, --verbose
-
-    Set log level to info, be more verbose
 
 .. option:: -y REMOTE_COPY, --remote-copy REMOTE_COPY
 
@@ -632,18 +621,10 @@ PREOS UBUNTU
 
    create bootable PreOS on specified drive
 
-.. option:: -d, --debug
-
-    Set log level to debug
-
 .. option:: -e REMOTE_EXEC, --remote-exec REMOTE_EXEC
 
     remote exec that cdist config will use, by default
     internal script is used
-
-.. option:: -h, --help
-
-    show this help message and exit
 
 .. option:: -i MANIFEST, --init-manifest MANIFEST
 
@@ -683,10 +664,6 @@ PREOS UBUNTU
 
     trigger command that will be added to cdist config;
     '``__cdist_preos_trigger http ...``' type is appended to initial manifest
-
-.. option:: -v, --verbose
-
-    Set log level to info, be more verbose
 
 .. option:: -y REMOTE_COPY, --remote-copy REMOTE_COPY
 
@@ -748,17 +725,9 @@ This command returns the following response codes to client requests:
 
     Add configuration directory (can be repeated, last one wins)
 
-.. option:: -d, --debug
-
-    Set log level to debug
-
 .. option:: -H HTTP_PORT, --http-port HTTP_PORT
 
     Create trigger listener via http on specified port
-
-.. option:: -h, --help
-
-    show this help message and exit
 
 .. option:: -i MANIFEST, --initial-manifest MANIFEST
 
@@ -777,6 +746,10 @@ This command returns the following response codes to client requests:
 
     directory to save cdist output in
 
+.. option:: -r REMOTE_OUT_PATH, --remote-out-dir REMOTE_OUT_PATH
+
+    Directory to save cdist output in on the target host
+
 .. option:: --remote-copy REMOTE_COPY
 
     Command to use for remote copy (should behave like scp)
@@ -784,10 +757,6 @@ This command returns the following response codes to client requests:
 .. option:: --remote-exec REMOTE_EXEC
 
     Command to use for remote execution (should behave like ssh)
-
-.. option:: -v, --verbose
-
-    Set log level to info, be more verbose
 
 
 FILES
