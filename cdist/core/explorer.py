@@ -24,6 +24,7 @@ import logging
 import os
 import glob
 import multiprocessing
+import re
 from cdist.mputil import mp_pool_run
 
 '''
@@ -89,7 +90,11 @@ class Explorer(object):
 
     def list_global_explorer_names(self):
         """Return a list of global explorer names."""
-        return glob.glob1(self.local.global_explorer_path, '*')
+        names = []
+        for name in glob.glob1(self.local.global_explorer_path, '*'):
+            if os.path.isfile(name):
+                names += [name]
+        return names
 
     def run_global_explorers(self, out_path):
         """Run global explorers and save output to files in the given
@@ -157,11 +162,36 @@ class Explorer(object):
     # type
 
     def list_type_explorer_names(self, cdist_type):
-        """Return a list of explorer names for the given type."""
-        source = os.path.join(self.local.type_path, cdist_type.explorer_path)
+        """Return a list of explorer names for the given type.
+           The list is composed of scripts located under __type/explorer
+           and those listed under __type/explorers."""
+
+        type_dir = os.path.join(self.local.type_path, cdist_type.explorer_path)
+        type_list = os.path.join(self.local.type_path, cdist_type.explorer_path + 's')
+        shared_dir = os.path.join(self.local.global_explorer_path, 'type')
+
+        comment_re = re.compile('^[\s]*(#|$)')
+        names = []
+
         try:
-            return glob.glob1(source, '*')
+            if os.path.isfile(type_list):
+                with open(type_list, 'r') as srcfile:
+                    for srcline in srcfile:
+                        if comment_re.match(srcline):
+                            continue
+
+                        explpath = os.path.join(shared_dir, srcline.strip())
+                        if not os.path.isfile(explpath):
+                            # FIXME exception? error?
+                            continue
+
+                        names += [explpath]
+
+            for elem in glob.glob1(type_dir, '*'):
+                names += [os.path.join(type_dir, elem)]
+            return names
         except EnvironmentError:
+            # better return an empty list than a partial list
             return []
 
     def run_type_explorers(self, cdist_object, transfer_type_explorers=True):
@@ -202,8 +232,7 @@ class Explorer(object):
             '__type_explorer': os.path.join(self.remote.type_path,
                                             cdist_type.explorer_path)
         })
-        script = os.path.join(self.remote.type_path, cdist_type.explorer_path,
-                              explorer)
+        script = os.path.join(self.remote.type_path, cdist_type.explorer_path, os.path.basename(explorer))
         return self.remote.run_script(script, env=env, return_output=True)
 
     def transfer_type_explorers(self, cdist_type):
@@ -214,12 +243,11 @@ class Explorer(object):
                 self.log.trace("Skipping retransfer of type explorers for: %s",
                                cdist_type)
             else:
-                source = os.path.join(self.local.type_path,
-                                      cdist_type.explorer_path)
                 destination = os.path.join(self.remote.type_path,
                                            cdist_type.explorer_path)
                 self.remote.mkdir(destination)
-                self.remote.transfer(source, destination)
+                for explorer in self.list_type_explorer_names(cdist_type):
+                    self.remote.transfer(explorer, destination)
                 self.remote.run(["chmod", "0700", "%s/*" % (destination)])
                 self._type_explorers_transferred.append(cdist_type.name)
 
